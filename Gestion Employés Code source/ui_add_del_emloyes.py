@@ -4,65 +4,63 @@ import employes_informations
 import ui_manager
 
 
-
-
 def main():
-
-    
-    
-
-
-
+    """
+    Fonction principale pour exécuter l'interface utilisateur de gestion des employés.
+    """
 
     def on_select(event):
         # Get the selected item from the Listbox
-            selection = tree.selection()
-            if selection:
-                item_value = tree.item(selection)
-                employee_info = item_value['values']
+        selection = tree.selection()
+        if selection:
+            item_value = tree.item(selection)
+            employee_info = item_value['values']
 
-                # Clear the fields
+            # Clear the fields
 
-                # Set the values in the Entry fields
-                entry_id.delete(0, tk.END)
-                entry_id.insert(tk.END, employee_info[0])
+            # Set the values in the Entry fields
+            entry_id.delete(0, tk.END)
+            entry_id.insert(tk.END, employee_info[0])
 
-                entry_last_name.delete(0, tk.END)
-                entry_last_name.insert(tk.END, employee_info[1])
+            entry_last_name.delete(0, tk.END)
+            entry_last_name.insert(tk.END, employee_info[1])
 
-                entry_name.delete(0, tk.END)
-                entry_name.insert(tk.END, employee_info[2])
+            entry_name.delete(0, tk.END)
+            entry_name.insert(tk.END, employee_info[2])
 
-                entry_telephone.delete(0, tk.END)
-                entry_telephone.insert(tk.END, employee_info[3])
+            entry_telephone.delete(0, tk.END)
+            entry_telephone.insert(tk.END, employee_info[3])
 
-                entry_address.delete(0, tk.END)
-                entry_address.insert(tk.END, employee_info[4])
+            entry_address.delete(0, tk.END)
+            entry_address.insert(tk.END, employee_info[4])
 
-                entry_diploma.delete(0, tk.END)
-                if employee_info[5] == 1 :
-                    status_diplome = "Diplômé"
-                else :
-                    status_diplome = "Pas de diplôme"
-                entry_diploma.insert(tk.END, status_diplome)
+            entry_diploma.delete(0, tk.END)
+            if employee_info[5] == 1:
+                status_diplome = "Diplômé"
+            else:
+                status_diplome = "Pas de diplôme"
+            entry_diploma.insert(tk.END, status_diplome)
 
-                entry_salary.delete(0, tk.END)
-                entry_salary.insert(tk.END, str(employee_info[6]))
-
+            entry_salary.delete(0, tk.END)
+            entry_salary.insert(tk.END, str(employee_info[6]))
 
 
     def reload_employee_list():
-
+        """
+        Recharge la liste des employés dans l'interface utilisateur.
+        """
         tree.delete(*tree.get_children())
-
 
         list_em = employes_informations.list_employes()
 
-        for employes in list_em :
+        for employes in list_em:
             tree.insert("", "end", values=(employes[0], employes[1], employes[2], employes[3], employes[4], employes[5], employes[6]))
 
 
     def clear_entry():
+        """
+        Efface les champs de saisie.
+        """
         entry_id.delete(0, tk.END)
         entry_name.delete(0, tk.END)
         entry_last_name.delete(0, tk.END)
@@ -72,6 +70,9 @@ def main():
         entry_salary.delete(0, tk.END)
 
     def add_employee():
+        """
+        Ajoute un employé.
+        """
         # Get employee information from the entry fields
         employee_id = entry_id.get()
         name = entry_name.get()
@@ -92,6 +93,9 @@ def main():
         reload_employee_list()
 
     def delete_employee():
+        """
+        Supprime un employé sélectionné.
+        """
         # Get the selected employee from the treeview
         selected_item = tree.selection()
         if selected_item:
@@ -99,13 +103,13 @@ def main():
             employee_info = item_value['values']
             employes_informations.del_employes([employee_info[0]])
             tree.delete(selected_item)
-        
-        
+
         reload_employee_list()
 
-        
-
     def update_employee():
+        """
+        Met à jour les informations d'un employé.
+        """
         employee_id = entry_id.get()
         name = entry_name.get()
         last_name = entry_last_name.get()
@@ -114,13 +118,13 @@ def main():
         diploma = entry_diploma.get()
         if diploma == "Diplomé":
             diploma = 1
-        else :
+        else:
             diploma = 0
         salary = entry_salary.get()
 
-        employes_informations.update_employes(name,last_name,telephone,address,diploma,salary,employee_id)
+        employes_informations.update_employes(name, last_name, telephone, address, diploma, salary, employee_id)
         reload_employee_list()
-    
+
     # Create the main window
     window = tk.Tk()
     window.title("Employee Management")
@@ -181,7 +185,7 @@ def main():
     button_add.grid(row=0, column=0, padx=5)
 
     # Update Employee Button
-    button_update = tk.Button(button_frame, text="Mettre à jour Employé",command=update_employee)
+    button_update = tk.Button(button_frame, text="Mettre à jour Employé", command=update_employee)
     button_update.grid(row=0, column=1, padx=5)
 
     # Delete Employee Button
@@ -191,7 +195,6 @@ def main():
     # Create a treeview to display the employee information
     tree_frame = tk.Frame(window)
     tree_frame.pack(pady=20)
-
 
     tree = ttk.Treeview(tree_frame, columns=("ID", "Nom", "Prénom", "Téléphone", "Adresse", "Diplôme", "Salaire"), show="headings")
     tree.column("ID", width=50)
@@ -212,18 +215,7 @@ def main():
 
     tree.bind('<<TreeviewSelect>>', on_select)
 
-
     reload_employee_list()
-
-
-
-    
-
-
 
     # Run the main window loop
     window.mainloop()
-
-
-
-
